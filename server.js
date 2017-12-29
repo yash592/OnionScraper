@@ -39,7 +39,7 @@ mongoose.Promise = Promise;
 
 if (process.env.MONGODB_URI) {
 
-  mongoose.connect(process.env.MONGODB_URI);
+  mongoose.connect('mongodb://heroku_pbghqpgn:m32je299tj5jujut72p3cq9169@ds135547.mlab.com:35547/heroku_pbghqpgn');
 
 } else {
 
