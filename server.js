@@ -33,42 +33,106 @@ mongoose.connect("mongodb://localhost/OnionScraper", {
   useMongoClient: true
 });
 
-// A GET route for scraping the echojs website
+// =====================================================================
+
+// Scraping route for Onion polititcs
+
+// =====================================================================
+
+
 app.get("/scrape", function(req, res) {
-  // First, we grab the body of the html with request
+  
   axios.get("https://politics.theonion.com/").then(function(response) {
-    // Then, we load that into cheerio and save it to $ for a shorthand selector
     var $ = cheerio.load(response.data);
 
-    // Now, we grab every h2 within an article tag, and do the following:
     $("h1.headline").each(function(i, element) {
-      // Save an empty result object
       var result = {};
 
-      // Add the text and href of every link, and save them as properties of the result object
       result.title = $(this).children().text();
       result.link = $(this).children().attr("href");
 
       console.log(result);
 
-      // Create a new Headline using the `result` object built from scraping
       db.Headline
         .create(result)
         .then(function(dbArticle) {
-          // If we were able to successfully scrape and save an Article, send a message to the client
-          res.send("Scrape Complete");
+          
         })
         .catch(function(err) {
-          // If an error occurred, send it to the client
           res.json(err);
         });
     });
+
+    res.send("Scrape Complete");
+
   });
+
+}); // /scrape ends here
+
+// =====================================================================
+
+// headline route for Onion polititcs
+
+// =====================================================================
+
+app.get("/headlines", function(req, res) {
+
+  db.Headline.find({})
+  .then(function(dbHeadline) {
+    res.json(dbHeadline)
+  })
+  .catch(function(err) {
+    res.json(err);
+  });
+}); // /headlines ends here
+
+//=====================================================================
+
+// route to get headlines by id
+
+// =====================================================================
+
+app.get("/headlines/:id", function(req, res) {
+
+  db.Headline.findOne({ _id: req.params.id })
+  .populate("note")
+  .then(function(dbHeadline) {
+
+    res.json(dbHeadline);
+
+  })
+  .catch(function(err) {
+
+    res.json(err);
+
+  });
+
+}); // headlines/id ends here
+
+//=====================================================================
+
+// route to post notes to headlines
+
+// =====================================================================
+
+app.post("/headlines/:id", function(req, res) {
+
+  db.Note.create(req.body)
+          .then(function(dbNote) {
+
+            return db.Headline.findOneAndUpdate({ _id: req.params.id }, {note: dbNote._id}, { new: true });
+          })
+          .then(function(dbArticle) {
+
+            res.json(dbArticle);
+
+          })
+          .catch(function(err) {
+
+            res.json(err);
+
+          });
 });
-
-
-
-
 
 
 
