@@ -43,7 +43,7 @@ if (process.env.MONGODB_URI) {
 
 } else {
 
-  mongoose.connect("mongodb://localhost/mongo-scraper", {
+  mongoose.connect("mongodb://localhost/OnionScraper", {
     useMongoClient: true
 
 
