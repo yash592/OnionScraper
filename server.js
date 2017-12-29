@@ -2,6 +2,7 @@ var express = require("express");
 var bodyParser = require("body-parser");
 var logger = require("morgan");
 var mongoose = require("mongoose");
+var exphbs = require("express-handlebars");
 
 // Our scraping tools
 // Axios is a promised-based http library, similar to jQuery's Ajax method
@@ -14,8 +15,14 @@ var db = require("./models");
 
 var PORT = 3000;
 
+
 // Initialize Express
 var app = express();
+
+
+// Set Handlebars as the default templating engine.
+app.engine("handlebars", exphbs({ defaultLayout: "main" }));
+app.set("view engine", "handlebars");
 
 // Configure middleware
 
@@ -33,6 +40,21 @@ mongoose.connect("mongodb://localhost/OnionScraper", {
   useMongoClient: true
 });
 
+
+//=====================================================================
+
+// route to render headlines 
+
+// =====================================================================
+
+app.get("/", function(req, res) {
+
+  res.render("index");
+
+});
+
+
+
 // =====================================================================
 
 // Scraping route for Onion polititcs
@@ -45,13 +67,23 @@ app.get("/scrape", function(req, res) {
   axios.get("https://politics.theonion.com/").then(function(response) {
     var $ = cheerio.load(response.data);
 
+    var results = [];
+
+    
+
     $("h1.headline").each(function(i, element) {
+
       var result = {};
+      
 
       result.title = $(this).children().text();
       result.link = $(this).children().attr("href");
 
       console.log(result);
+
+      results.push(result);
+
+      console.log(results);
 
       db.Headline
         .create(result)
@@ -63,7 +95,11 @@ app.get("/scrape", function(req, res) {
         });
     });
 
-    res.send("Scrape Complete");
+    var data = {
+      news: results
+    }
+
+    res.render("index", {data});
 
   });
 
@@ -133,6 +169,8 @@ app.post("/headlines/:id", function(req, res) {
 
           });
 });
+
+
 
 
 
