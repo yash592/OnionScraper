@@ -17,6 +17,11 @@ var HeadlineSchema = new Schema({
 	note: {
 		type: Schema.Types.ObjectId,
 		ref: "Note"
+	},
+
+	fav: {
+	  type: Boolean,
+	  default: false
 	}
 });
 
