@@ -33,9 +33,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 // Use express.static to serve the public folder as a static directory
 app.use(express.static("public"));
 
+
+
 // Set mongoose to leverage built in JavaScript ES6 Promises
 // Connect to the Mongo DB
-mongoose.Promise = Promise;
+
+var databaseUri = 'mongodb://localhost/OnionScraper'
+
 
 if (process.env.MONGODB_URI) {
 
@@ -43,12 +47,21 @@ if (process.env.MONGODB_URI) {
 
 } else {
 
-  mongoose.connect("mongodb://localhost/OnionScraper", {
-    useMongoClient: true
+  mongoose.connect(databaseUri);
 
 
-  });
-}
+  };
+
+
+var db = mongoose.connection;
+
+db.on('error', function(err) {
+  console.log('Mongoose error: ', err);
+});
+
+db.once('open', function() {
+  console.log('Mongoose connection successful!')
+});
 
 
 //=====================================================================
