@@ -18,7 +18,7 @@
 
     	{{#each data.news}}
     		<p>{{title}}</p>
-    		<p>{{link}}</p>
+    		<a href="{{this.link}}"" target="_blank">{{link}}</a>
     		<button class="fav" data-id="{{id}}" data-newsleep="{{sleep}}">
     			SAVE ARTICLE!
     		</button>
