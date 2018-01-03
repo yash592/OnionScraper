@@ -113,6 +113,18 @@ app.get("/scrape", function(req, res) {
 
 }); // /scrape ends here
 
+
+// =====================================================================
+
+// headline route saved articles
+
+// =====================================================================
+
+app.get("/savedheadlines", function(req, res) {
+  
+})
+
+
 // =====================================================================
 
 // headline route for Onion polititcs

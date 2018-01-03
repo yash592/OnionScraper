@@ -1,0 +1,28 @@
+<nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header"><a class="navbar-brand" href="#">Onion Scraper!</a><button class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navcol-1"><span class="sr-only">Toggle navigation</span><span class="icon-bar"></span><span class="icon-bar"></span><span class="icon-bar"></span></button></div>
+            <div
+                class="collapse navbar-collapse" id="navcol-1">
+                <ul class="nav navbar-nav navbar-right">
+                    <li role="presentation"><a href="#">Saved News</a></li>
+                </ul>
+        </div>
+        </div>
+    </nav>
+    <div class="jumbotron">
+        <h1 class="text-center">Onion Scraper!</h1>
+        <p class="text-center">Your daily dose of satire!</p>
+        <p><a class="btn btn-success btn-block btn-lg" role="button" href="/scrape" target="_blank">Scrape! </a></p>
+    </div>
+    <div id = "saved">
+
+    	{{#each data.news}}
+    		<p>{{title}}</p>
+    		<a href="{{this.link}}"" target="_blank">{{link}}</a>
+    		<button class="fav" data-id="{{id}}" data-newsleep="{{sleep}}">
+    			SAVE ARTICLE!
+    		</button>
+    		<hr>
+    	{{/each}}        
+
+    </div>
