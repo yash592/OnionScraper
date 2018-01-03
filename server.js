@@ -87,11 +87,11 @@ app.get("/scrape", function(req, res) {
       result.title = $(this).children().text();
       result.link = $(this).children().attr("href");
 
-      console.log(result);
+      // console.log(result);
 
       results.push(result);
 
-      console.log(results);
+      // console.log(results);
 
       db.Headline
         .create(result)
